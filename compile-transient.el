@@ -1,9 +1,16 @@
 (require 'transient)
 (require 'dash)
 
+(defun compile-transient--unique-buffer-name ()
+  (generate-new-buffer-name "*compilation*"))
+
 (defun compile-transient--compile-suf (args)
   (interactive (list (transient-args 'compile-transient)))
   (-let* ((interactive? (--some (string= "--interactive" it) args))
+          (ensure-new-buffer? (--some (string= "--ensure-new-buffer" it) args))
+          (compilation-buffer-name-function (if ensure-new-buffer?
+                                                (-const (compile-transient--unique-buffer-name))
+                                              compilation-buffer-name-function))
           (prefix-arg (if interactive? '(4) '())))
     (execute-extended-command prefix-arg "compile")))
 
@@ -37,7 +44,8 @@
 (define-transient-command compile-transient ()
   "A transient for compilation."
   ["Options"
-   ("i" "Interactive compilation." ("-i" "--interactive"))]
+   ("i" "Interactive compilation." ("-i" "--interactive"))
+   ("n" "Ensure new buffer." ("-n" "--ensure-new-buffer"))]
   ["Actions (no command)"
    ("c" "Compile" compile-transient--compile-suf)
    ("C" "Clean Compile (no suggestion)" compile-transient--clean-suf)
