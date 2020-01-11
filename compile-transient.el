@@ -22,29 +22,29 @@
 
 (defun compile-transient--from-org-block-suf ()
   (interactive)
-  (-let* (((_ (&plist :value command)) (org-element-at-point))
-          (compile-command (s-trim command)))
+  (-let* (((_ (&plist :value command)) (org-element-at-point)))
+    (setq compile-command (s-trim command))
     (call-interactively #'compile-transient--compile-suf)))
 
 (defun compile-transient--from-region-suf (beg end)
   (interactive "r")
-  (let ((compile-command (buffer-substring-no-properties beg end)))
-    (call-interactively #'compile-transient--compile-suf)))
+  (setq compile-command (buffer-substring-no-properties beg end))
+  (call-interactively #'compile-transient--compile-suf))
 
 (defun compile-transient--clean-suf ()
   (interactive)
-  (let ((compile-command ""))
-    (call-interactively #'compile-transient--compile-suf)))
+  (setq compile-command "")
+  (call-interactively #'compile-transient--compile-suf))
 
 (defun compile-transient--from-kill-ring ()
   (interactive)
-  (let ((compile-command (-> (current-kill 0) substring-no-properties)))
-    (call-interactively #'compile-transient--compile-suf)))
+  (setq compile-command (-> (current-kill 0) substring-no-properties))
+  (call-interactively #'compile-transient--compile-suf))
 
 (defun compile-transient--cd-current-project ()
   (interactive)
-  (let ((compile-command (s-concat "cd " (projectile-project-root) " && ")))
-    (call-interactively #'compile-transient--compile-suf)))
+  (setq compile-command (s-concat "cd " (projectile-project-root) " && "))
+  (call-interactively #'compile-transient--compile-suf))
 
 (define-transient-command compile-transient ()
   "A transient for compilation."
