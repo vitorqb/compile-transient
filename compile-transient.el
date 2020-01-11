@@ -41,6 +41,11 @@
   (let ((compile-command (-> (current-kill 0) substring-no-properties)))
     (call-interactively #'compile-transient--compile-suf)))
 
+(defun compile-transient--cd-current-project ()
+  (interactive)
+  (let ((compile-command (s-concat "cd " (projectile-project-root) " && ")))
+    (call-interactively #'compile-transient--compile-suf)))
+
 (define-transient-command compile-transient ()
   "A transient for compilation."
   ["Options"
@@ -53,6 +58,7 @@
   ["Actions (pre-filled commands)"
    ("b" "Compile from ORG BLOCK." compile-transient--from-org-block-suf)
    ("R" "Compile from REGION" compile-transient--from-region-suf)
-   ("K" "Compile from KILL-RING" compile-transient--from-kill-ring)])
+   ("K" "Compile from KILL-RING" compile-transient--from-kill-ring)
+   ("p" "Compile with cd to project root" compile-transient--cd-current-project)])
 
 (provide 'compile-transient)
