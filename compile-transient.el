@@ -47,12 +47,12 @@
    ("i" "Interactive compilation." ("-i" "--interactive"))
    ("n" "Ensure new buffer." ("-n" "--ensure-new-buffer"))]
   ["Actions (no command)"
-   ("c" "Compile" compile-transient--compile-suf)
-   ("C" "Clean Compile (no suggestion)" compile-transient--clean-suf)
+   ("k" "Compile" compile-transient--compile-suf)
+   ("c" "Clean Compile (no suggestion)" compile-transient--clean-suf)
    ("r" "Recompile" compile-transient--recompile-suf)]
   ["Actions (pre-filled commands)"
    ("b" "Compile from ORG BLOCK." compile-transient--from-org-block-suf)
    ("R" "Compile from REGION" compile-transient--from-region-suf)
-   ("k" "Compile from KILL-RING" compile-transient--from-kill-ring)])
+   ("K" "Compile from KILL-RING" compile-transient--from-kill-ring)])
 
 (provide 'compile-transient)
