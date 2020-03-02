@@ -17,7 +17,7 @@
 (require 'dash)
 
 ;; Helpers
-(defun compile-transient--unique-buffer-name ()
+(defun compile-transient--unique-buffer-name (&rest _)
   (generate-new-buffer-name "*compilation*"))
 
 (defun compile-transient--get-compilation-buffer-name-function (args)

@@ -31,4 +31,11 @@
             (result (compile-transient--get-compilation-buffer-name-function args))
             (result-buffer-name (funcall result)))
       (should (string= result-buffer-name "*foo*")))))
+
+(ert-deftest test-compile-transient--compile-transient--unique-buffer-name ()
+
+  ;; Accepts as many args as needed
+  (cl-letf (((symbol-function 'generate-new-buffer-name) (lambda (x) (s-concat x "<2>"))))
+    (should (string= (compile-transient--unique-buffer-name "FOO" :bar) "*compilation*<2>"))))
+
 ;;; compile-transient-test.el ends here
