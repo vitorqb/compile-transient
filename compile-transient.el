@@ -41,11 +41,17 @@
       (-const new-buffer-name-val)))))
 
 ;; Infixes
-(define-infix-command compile-transient--set-buf-name-inf
-  "An infix command that set's the global variable `compile-transient-buffer-name` to
+(if (fboundp 'transient-define-infix)
+    (transient-define-infix compile-transient--set-buf-name-inf
+      "An infix command that set's the global variable `compile-transient-buffer-name` to
    set the name of the compilation buffer."
-  :class transient-option
-  :argument "--new-buffer-name=")
+      :class transient-option
+      :argument "--new-buffer-name=")
+  (define-infix-command compile-transient--set-buf-name-inf
+    "An infix command that set's the global variable `compile-transient-buffer-name` to
+   set the name of the compilation buffer."
+    :class transient-option
+    :argument "--new-buffer-name="))
 
 ;; Sufixes
 (defun compile-transient--compile-suf (args)
@@ -89,21 +95,37 @@
   (setq compile-command (s-concat "cd " (projectile-project-root) " && "))
   (call-interactively #'compile-transient--compile-suf))
 
-(define-transient-command compile-transient ()
-  "A transient for compilation."
-  ["Options"
-   ("i" "Interactive compilation." ("-i" "--interactive"))
-   ("n" "Ensure new buffer." ("-n" "--ensure-new-buffer"))
-   ("N" "Set buffer name" compile-transient--set-buf-name-inf)]
-  ["Actions (no command)"
-   ("k" "Compile" compile-transient--compile-suf)
-   ("c" "Clean Compile (no suggestion)" compile-transient--clean-suf)
-   ("r" "Recompile" compile-transient--recompile-suf)]
-  ["Actions (pre-filled commands)"
-   ("b" "Compile from ORG BLOCK." compile-transient--from-org-block-suf)
-   ("R" "Compile from REGION" compile-transient--from-region-suf)
-   ("K" "Compile from KILL-RING" compile-transient--from-kill-ring)
-   ("p" "Compile with cd to project root" compile-transient--cd-current-project)])
+(if (fboundp 'define-transient-command)
+    (define-transient-command compile-transient ()
+      "A transient for compilation."
+      ["Options"
+       ("i" "Interactive compilation." ("-i" "--interactive"))
+       ("n" "Ensure new buffer." ("-n" "--ensure-new-buffer"))
+       ("N" "Set buffer name" compile-transient--set-buf-name-inf)]
+      ["Actions (no command)"
+       ("k" "Compile" compile-transient--compile-suf)
+       ("c" "Clean Compile (no suggestion)" compile-transient--clean-suf)
+       ("r" "Recompile" compile-transient--recompile-suf)]
+      ["Actions (pre-filled commands)"
+       ("b" "Compile from ORG BLOCK." compile-transient--from-org-block-suf)
+       ("R" "Compile from REGION" compile-transient--from-region-suf)
+       ("K" "Compile from KILL-RING" compile-transient--from-kill-ring)
+       ("p" "Compile with cd to project root" compile-transient--cd-current-project)])
+  (transient-define-prefix compile-transient ()
+    "A transient for compilation."
+    ["Options"
+     ("i" "Interactive compilation." ("-i" "--interactive"))
+     ("n" "Ensure new buffer." ("-n" "--ensure-new-buffer"))
+     ("N" "Set buffer name" compile-transient--set-buf-name-inf)]
+    ["Actions (no command)"
+     ("k" "Compile" compile-transient--compile-suf)
+     ("c" "Clean Compile (no suggestion)" compile-transient--clean-suf)
+     ("r" "Recompile" compile-transient--recompile-suf)]
+    ["Actions (pre-filled commands)"
+     ("b" "Compile from ORG BLOCK." compile-transient--from-org-block-suf)
+     ("R" "Compile from REGION" compile-transient--from-region-suf)
+     ("K" "Compile from KILL-RING" compile-transient--from-kill-ring)
+     ("p" "Compile with cd to project root" compile-transient--cd-current-project)]))
 
 (provide 'compile-transient)
 ;;; compile-transient.el ends here
