@@ -42,7 +42,7 @@
 
 ;; Infixes
 (if (fboundp 'transient-define-infix)
-    (transient-define-infix compile-transient--set-buf-name-inf
+    (transient-define-infix compile-transient--set-buf-name-inf ()
       "An infix command that set's the global variable `compile-transient-buffer-name` to
    set the name of the compilation buffer."
       :class transient-option
